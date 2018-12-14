@@ -1,0 +1,69 @@
+{
+  "name": "react-spa-starter",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "formik": "^1.0.3",
+    "history": "^4.7.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-loadable": "^5.4.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-scripts-ts": "2.16.0",
+    "redux": "^4.0.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.2.2",
+    "yup": "^0.26.2"
+  },
+  "scripts": {
+    "analyze": "react-scripts-ts build && source-map-explorer build/static/js/main.*",
+    "start": "concurrently \"node-sass-chokidar --include-path src/scss src/ !src/scss -o src/ --watch --recursive --output-style compressed\" \"react-scripts-ts start\"",
+    "build": "node-sass-chokidar --include-path src/scss src/ -o src/ --output-style compressed && react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.13",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "@types/enzyme-to-json": "^1.5.2",
+    "@types/history": "^4.6.2",
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.5.4",
+    "@types/react": "^16.4.7",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-loadable": "^5.4.0",
+    "@types/react-redux": "^6.0.11",
+    "@types/react-router-dom": "^4.3.0",
+    "@types/redux-logger": "^3.0.6",
+    "@types/redux-mock-store": "^1.0.0",
+    "@types/why-did-you-update": "^0.0.9",
+    "@types/yup": "^0.24.8",
+    "concurrently": "^3.6.1",
+    "enzyme": "^3.4.1",
+    "enzyme-adapter-react-16": "^1.2.0",
+    "enzyme-to-json": "^3.3.4",
+    "node-sass-chokidar": "^1.3.3",
+    "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.3",
+    "source-map-explorer": "^1.6.0",
+    "typescript": "^3.2.2",
+    "why-did-you-update": "^0.1.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "@interfaces": "<rootDir>/src/interfaces",
+      "@share": "<rootDir>/src/app/share",
+      "@router": "<rootDir>/src/app/router",
+      "@actions/(.*)": "<rootDir>/src/redux/$1/actions",
+      "@utils": "<rootDir>/src/utils",
+      "@containers": "<rootDir>/src/app/containers/*",
+      "@pages/(.*)": "<rootDir>/src/app/pages/$1",
+      "@store": "<rootDir>/src/store",
+      "@redux/(.*)": "<rootDir>/src/redux/$1",
+      "@services": "<rootDir>/src/services",
+      "@constants": "<rootDir>/src/constants",
+      "@img/(.*)": "<rootDir>/src/assets/img/$1"
+    }
+  }
+}
