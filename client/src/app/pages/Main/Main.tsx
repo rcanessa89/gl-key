@@ -30,16 +30,16 @@ class Main extends React.PureComponent<IRouteComponentProps, IMainState> {
           aria-label="main navigation"
         >
           <div className="navbar-brand">
-            <a
+            <Link
               className="navbar-item"
-              href="https://bulma.io"
+              to={paths.entries}
             >
               <img
                 className="navbar__logo"
                 src={glImg}
                 alt="Gorilla logic"
               />
-            </a>
+            </Link>
             <a
               className="navbar-burger burger"
               role="button"
@@ -80,6 +80,13 @@ class Main extends React.PureComponent<IRouteComponentProps, IMainState> {
               >
                 Exports
               </Link>
+            </div>
+            <div className="navbar-end">
+              <div className="navbar-item">
+                <div className="buttons">
+                  <button className="button is-link">Log out</button>
+                </div>
+              </div>
             </div>
           </div>
         </nav>

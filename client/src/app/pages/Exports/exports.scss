@@ -4,17 +4,4 @@
   &__button-container {
     margin-top: $gutter-3;
   }
-
-  &__button {
-    background-color: $supernova;
-    border: transparent;
-
-    &:hover {
-      background-color: darken($supernova, 3%);
-    }
-
-    &:active {
-      background-color: darken($supernova, 5%);
-    }
-  }
 }

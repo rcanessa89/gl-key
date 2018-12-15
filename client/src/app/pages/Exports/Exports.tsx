@@ -30,14 +30,14 @@ class Exports extends React.PureComponent<IRouteComponentProps> {
               <h4 className="title is-4">Entries</h4>
               <input className="input" placeholder="Select the date range" type="date" />
               <div className="exports__button-container">
-                <button className="exports__button button">Export</button>
+                <button className="button is-link">Export</button>
               </div>
             </div>
             <div className="column is-5 is-offset-1">
               <h4 className="title is-4">Assets</h4>
               <input className="input" placeholder="Select the date range" type="date" />
               <div className="exports__button-container">
-                <button className="exports__button button">Export</button>
+                <button className="button is-link">Export</button>
               </div>
             </div>
           </div>
