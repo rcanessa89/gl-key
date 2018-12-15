@@ -53,6 +53,9 @@
       ],
       "@constants": [
         "src/constants"
+      ],
+      "@assets/*": [
+        "src/assets/*"
       ]
     }
   },

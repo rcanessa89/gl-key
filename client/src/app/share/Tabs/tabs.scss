@@ -1,0 +1,10 @@
+@import 'util';
+
+.tabs {
+  &__item.is-active {
+    a.tabs__link {
+      color: $supernova;
+      border-bottom-color: $supernova;
+    }
+  }
+}

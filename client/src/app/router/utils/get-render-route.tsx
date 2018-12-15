@@ -1,4 +1,4 @@
-import { IRouteComponentProps } from '@interfaces';
+import { IRouteOptsProps } from '@interfaces';
 import { paths } from '@router';
 import * as React from 'react';
 import { Redirect, RouteProps } from 'react-router';
@@ -7,12 +7,12 @@ import isNotFound from './is-not-found';
 export interface IGetRenderRoute {
   Component: any;
   nested: Array<React.ReactElement<any>> | undefined;
-  props: Partial<IRouteComponentProps>;
+  props: Partial<IRouteOptsProps>;
   isPublic: boolean;
 }
 
 export default (opts: IGetRenderRoute) => (renderProps: RouteProps) => {
-  if (isNotFound(opts.props as IRouteComponentProps, renderProps)) {
+  if (isNotFound(opts.props as IRouteOptsProps, renderProps)) {
     return <Redirect to={paths.noMatch} />;
   }
 
@@ -22,10 +22,14 @@ export default (opts: IGetRenderRoute) => (renderProps: RouteProps) => {
     return <Redirect to={redirectPath} />;
   }
 
+  const nested = opts.nested || null;
+
   return (
     <opts.Component
       {...renderProps}
-      nested={opts.nested}
+      {...opts.props}
+      nested={nested}
+      public={opts.isPublic}
     />
   );
 };

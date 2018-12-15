@@ -1,0 +1,21 @@
+@import 'util';
+
+.navbar {
+  background-color: $shark;
+  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.75);;
+
+  &__item.navbar-item {
+    color: $white;
+
+    &:hover {
+      color: $supernova;
+      background-color: $shark-light; 
+    }
+  }
+
+  &__menu {
+    @include until($desktop) {
+      background-color: $black;
+    }
+  }
+}

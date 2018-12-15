@@ -1,5 +1,48 @@
+@import 'util';
+@import '../node_modules/bulma/bulma';
+@import '../node_modules/bulma-calendar/dist/css/bulma-calendar';
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  font-size: $base-font-size;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ReactVirtualized__Grid{
+  outline: none;
+}
+
+.ReactVirtualized__Table__headerRow {
+  border-bottom: 2px solid $alto;
+  margin-bottom: 5px;
+}
+
+.ReactVirtualized__Table__rowColumn,
+.ReactVirtualized__Table__headerColumn {
+  margin: 0 !important;
+  text-align: center;
+}
+
+.ReactVirtualized__Table__headerColumn {
+  color: $mine-shaft;
+  text-transform: capitalize;
+}
+
+.ReactVirtualized__Table__rowColumn {
+  border-bottom: 1px solid $alto;
+}
+
+@include tablet {
+  font-size: $base-font-size-tablet;
+}
+
+@include mobile {
+  font-size: $base-font-size-mobile;
 }

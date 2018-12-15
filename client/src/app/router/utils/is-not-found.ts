@@ -1,7 +1,7 @@
-import { IRouteComponentProps } from '@interfaces';
+import { IRouteOptsProps } from '@interfaces';
 import { matchPath, RouteProps } from 'react-router';
 
-export default (props: IRouteComponentProps, renderProps: RouteProps): boolean => {
+export default (props: IRouteOptsProps, renderProps: RouteProps): boolean => {
   const matchResult = matchPath(
     renderProps.location!.pathname,
     {

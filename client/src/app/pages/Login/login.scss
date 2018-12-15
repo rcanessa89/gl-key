@@ -1,12 +1,26 @@
 @import 'util';
 
+$wrapper-padding: $gutter-5;
+$wrapper-width: em(400) + $wrapper-padding;
+
 .login {
-  &__intro {
-    font-size: em(24);
-    display: flex;
+  @include flex(center, center);
+  min-height: 100vh;
+
+  &__form-wrapper {
+    width: $wrapper-width;
+    max-width: 100%;
+    padding: $wrapper-padding;
   }
 
-  &__title {
-    text-align: center;
+  &__logo {
+    display: block;
+    margin: 0 auto $gutter-3;
+    width: 200px;
+  }
+
+  &__bottom {
+    @include flex(center);
+    margin-top: $gutter-4;
   }
 }

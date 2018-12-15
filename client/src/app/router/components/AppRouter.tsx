@@ -1,16 +1,18 @@
+import { DOCUMENT_TITLE_PREFIX } from '@constants';
 import AuthContainer from '@containers/auth/AuthContainer';
 import { IAuthContainerChildProps } from '@containers/auth/interfaces';
 import FetchContainer from '@containers/fetch/FetchContainer';
 import { IFetchContainerChildProps } from '@containers/fetch/interfaces';
 import { IRouterContainerChildProps, IRouteState } from '@containers/router/interfaces';
 import RouterContainer from '@containers/router/RouterContainer';
-import { IAppRoute, IRouteComponentProps } from '@interfaces';
+import { IAppRoute, IRouteOptsProps } from '@interfaces';
 import { history, paths, routes } from '@router';
-import { CreateAsyncComponent, guid } from '@utils';
+import { createAsyncComponent, guid } from '@utils';
 import { UnregisterCallback } from 'history';
 import * as React from 'react';
 import { ReactElement } from 'react';
 import { Route, RouteProps, Router, Switch } from 'react-router-dom';
+import { getPlainRoutes } from '../utils';
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 
@@ -22,7 +24,7 @@ type AppRouterProps = IAuthContainerChildProps & IFetchContainerChildProps & IRo
 
 export class AppRouter extends React.Component<any> {
   private unlisten = this.historyListener();
-  private plainRoutes: IRouteComponentProps[] = [];
+  private plainRoutes: IRouteOptsProps[] = [];
 
   public componentDidMount(): void {
     this.setInitialRouteState();
@@ -43,9 +45,9 @@ export class AppRouter extends React.Component<any> {
       <Router history={history}>
         <Switch>
           {routerRoutes}
-          <Route component={CreateAsyncComponent(() => import('@pages/NotFound'))} />
+          <Route component={createAsyncComponent(() => import('@pages/NotFound'))} />
           <Route
-            component={CreateAsyncComponent(() => import('@pages/NotFound'))}
+            component={createAsyncComponent(() => import('@pages/NotFound'))}
             path={paths.noMatch}
           />
         </Switch>
@@ -54,7 +56,7 @@ export class AppRouter extends React.Component<any> {
   }
 
   // Return a unique route element
-  private buildRoute(isAuthorized: boolean, route: IRouteComponentProps): ReactElement<IAppRouteProps> {
+  private buildRoute(isAuthorized: boolean, route: IRouteOptsProps): ReactElement<IAppRouteProps> {
     this.plainRoutes.push(route);
 
     const key = guid();
@@ -128,13 +130,17 @@ export class AppRouter extends React.Component<any> {
   }
 
   private setDocumentTitle(path: string): void {
-    const filteredRoutes = routes.filter(route => route.path === path);
-    const hasTitle = filteredRoutes.length && filteredRoutes[0].title;
+    const plainRoutes = getPlainRoutes();
+    const filteredRoutes = plainRoutes.filter(route => route.path === path);
+    const hasTitle = filteredRoutes.length && filteredRoutes[filteredRoutes.length - 1].title;
 
     if (hasTitle) {
-      document.title = filteredRoutes[0].title as string;
+      const title = filteredRoutes[filteredRoutes.length - 1].title;
+      const fullTitle = `${DOCUMENT_TITLE_PREFIX} - ${title}`;
+
+      document.title = fullTitle;
     } else {
-      document.title = '';
+      document.title = DOCUMENT_TITLE_PREFIX;
     }
   }
 }

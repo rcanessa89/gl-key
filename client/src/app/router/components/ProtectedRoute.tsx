@@ -1,10 +1,10 @@
-import { IRouteComponentProps } from '@interfaces';
+import { IRouteOptsProps } from '@interfaces';
 import * as React from 'react';
 import { SFC } from 'react';
 import { Route } from 'react-router-dom';
 import { getRenderRoute, validateProps } from '../utils';
 
-const ProtectedRoute: SFC<IRouteComponentProps> = ({
+const ProtectedRoute: SFC<IRouteOptsProps> = ({
   component,
   nested,
   ...props
