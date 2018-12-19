@@ -3,6 +3,7 @@ const main = '/';
 const entries = main;
 const assests = '/assests';
 const exports = '/exports';
+const passwordChallenge = '/password-challenge';
 const publicRouteRedirect = entries;
 const protectedRouteRedirect = login;
 const noMatch = '/404';
@@ -14,6 +15,7 @@ export default {
   login,
   main,
   noMatch,
+  passwordChallenge,
   protectedRouteRedirect,
   publicRouteRedirect,
 };

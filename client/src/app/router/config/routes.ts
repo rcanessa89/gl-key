@@ -17,26 +17,28 @@ const main: IAppRoute = {
       component: createAsyncComponent(() => import('@pages/Entries')),
       exact: true,
       path: paths.entries,
-      public: true,
       title: 'Entries',
     },
     {
       component: createAsyncComponent(() => import('@pages/Assets')),
       exact: true,
       path: paths.assests,
-      public: true,
       title: 'Assets',
     },
     {
       component: createAsyncComponent(() => import('@pages/Exports')),
       exact: true,
       path: paths.exports,
-      public: true,
       title: 'Exports',
     },
+    {
+      component: createAsyncComponent(() => import('@pages/PasswordChallenge')),
+      exact: true,
+      path: paths.passwordChallenge,
+      title: 'Change your password',
+    }
   ],
   path: paths.main,
-  public: true,
 };
 
 const routes: IAppRoute[] = [

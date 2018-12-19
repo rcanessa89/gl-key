@@ -1,3 +1,4 @@
+import AuthContainer from '@containers/auth/AuthContainer';
 import Main from './Main';
 
-export default Main;
+export default AuthContainer(Main);

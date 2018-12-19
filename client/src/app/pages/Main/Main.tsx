@@ -1,7 +1,9 @@
 import { DOCUMENT_TITLE_PREFIX } from '@constants';
+import { IAuthContainerChildProps } from '@containers/auth/interfaces';
 import { IRouteComponentProps } from '@interfaces';
 import { paths } from '@router';
 import classnames from 'classnames';
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import glImg from '../../../assets/img/gorillalogic-white.png';
@@ -9,14 +11,20 @@ import './main.css';
 
 const navContentId = 'nav-bar-content';
 
+type MainProps = IRouteComponentProps & IAuthContainerChildProps;
+
 interface IMainState {
   open: boolean;
 }
 
-class Main extends React.PureComponent<IRouteComponentProps, IMainState> {
+class Main extends React.Component<MainProps, IMainState> {
   public state = {
     open: false,
   };
+
+  public shouldComponentUpdate(nextProps: MainProps, nextState: IMainState) {
+    return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState)
+  }
 
   public render() {
     const textToRemove = `${DOCUMENT_TITLE_PREFIX} - `;
@@ -84,7 +92,10 @@ class Main extends React.PureComponent<IRouteComponentProps, IMainState> {
             <div className="navbar-end">
               <div className="navbar-item">
                 <div className="buttons">
-                  <button className="button is-link">Log out</button>
+                  <button
+                    className="button is-link"
+                    onClick={this.props.logout}
+                  >Log out</button>
                 </div>
               </div>
             </div>

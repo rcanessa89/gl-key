@@ -1,0 +1,7 @@
+@import 'util';
+
+.input-text {
+  &__error {
+    margin-top: $gutter-1;
+  }
+}

@@ -3,25 +3,18 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import {
   AuthAction,
-  authOff,
-  authRequestFailed,
-  authRequestSuccess,
+  authCurrentSession,
+  authLogOut,
+  authRequest,
 } from './actions';
-import { IAuthContainerProps, IAuthCredentials } from './interfaces';
+import { IAuthCredentials } from './interfaces';
 
 const mapStateToProps = ({ auth }: IStore) => ({ auth });
 
-const mapDispatchToProps = (dispatch: Dispatch<AuthAction>, props: IAuthContainerProps) => ({
-  login: (payload: IAuthCredentials) => props.fetchData({
-    failed: authRequestFailed,
-    options: {
-      body: payload,
-      method: 'POST',
-      url: '/login',
-    },
-    success: authRequestSuccess,
-  }),
-  logout: () => dispatch(authOff()),
+const mapDispatchToProps = (dispatch: Dispatch<AuthAction>) => ({
+  currentSession: () => dispatch(authCurrentSession()),
+  login: (payload: IAuthCredentials) => dispatch(authRequest(payload)),
+  logout: () => dispatch(authLogOut()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps);

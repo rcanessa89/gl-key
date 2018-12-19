@@ -7,4 +7,5 @@ export default interface IRouteOptsProps {
   nested?: Array<React.ReactElement<any>>;
   path: string;
   exact?: boolean;
+  challengeName?: string;
 }

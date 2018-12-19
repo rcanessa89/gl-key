@@ -1,6 +1,9 @@
-import { IFetchDataPayload } from '../fetch/interfaces';
+import { CognitoUser } from 'amazon-cognito-identity-js';
 import {
+  AUTH_CURRENT_SESSION,
+  AUTH_LOG_OUT,
   AUTH_OFF,
+  AUTH_REQUEST,
   AUTH_REQUEST_FAILED,
   AUTH_REQUEST_SUCCESS
 } from './types';
@@ -10,16 +13,14 @@ export interface IAuthCredentials {
   password: string;
 };
 
-export interface IUser {
-  id: number;
-  first_name: string;
-  last_name: string;
-  avatar: string;
+export interface IAuthRequest {
+  type: AUTH_REQUEST,
+  payload: IAuthCredentials,
 }
 
 export interface IAuthRequestSuccess {
   type: AUTH_REQUEST_SUCCESS;
-  payload: IUser;
+  payload: CognitoUser;
 };
 
 export interface IAuthRequestFailed {
@@ -27,27 +28,28 @@ export interface IAuthRequestFailed {
   payload: string;
 };
 
+export interface IAuthCurrentSession {
+  type: AUTH_CURRENT_SESSION;
+}
+
+export interface IAuthLogOut {
+  type: AUTH_LOG_OUT;
+};
+
 export interface IAuthOff {
   type: AUTH_OFF;
 };
 
 export interface IAuthState {
-  readonly isAuthorized: boolean;
-  readonly message: string;
-  readonly user: IUser | null;
+  isAuthorized: boolean;
+  message: string;
+  user: CognitoUser | null;
+  onRequest: boolean;
 }
 
-export interface IAuthLoginPayload {
-  email: string;
-  password: string;
-}
-
-export interface IAuthContainerProps {
-  fetchData: (payload: IFetchDataPayload) => undefined;
-}
-
-export interface IAuthContainerChildProps extends IAuthContainerProps {
+export interface IAuthContainerChildProps {
   auth: IAuthState,
-  login: (payload: IAuthLoginPayload) => undefined;
-  logout: () => undefined;
+  login: (payload: IAuthCredentials) => IAuthRequest;
+  logout: () => IAuthOff;
+  currentSession: any;
 }

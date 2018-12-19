@@ -1,3 +1,4 @@
+import loaderBackImg from '@assets/img/gorilla-black-back.png';
 import { DOCUMENT_TITLE_PREFIX } from '@constants';
 import AuthContainer from '@containers/auth/AuthContainer';
 import { IAuthContainerChildProps } from '@containers/auth/interfaces';
@@ -8,6 +9,7 @@ import RouterContainer from '@containers/router/RouterContainer';
 import { IAppRoute, IRouteOptsProps } from '@interfaces';
 import { history, paths, routes } from '@router';
 import { createAsyncComponent, guid } from '@utils';
+import classnames from 'classnames';
 import { UnregisterCallback } from 'history';
 import * as React from 'react';
 import { ReactElement } from 'react';
@@ -20,14 +22,26 @@ interface IAppRouteProps extends RouteProps {
   isAuthorized: boolean;
 };
 
-type AppRouterProps = IAuthContainerChildProps & IFetchContainerChildProps & IRouterContainerChildProps;
+type AppRouterProps = (
+  IAuthContainerChildProps &
+  IFetchContainerChildProps &
+  IRouterContainerChildProps &
+  any
+);
 
-export class AppRouter extends React.Component<any> {
+const loaderStyles = {
+  backgroundImage: `url(${loaderBackImg})`,
+  backgroundPosition: 'bottom right',
+  backgroundRepeat: 'no-repeat',
+};
+
+export class AppRouter extends React.Component<AppRouterProps> {
   private unlisten = this.historyListener();
   private plainRoutes: IRouteOptsProps[] = [];
 
   public componentDidMount(): void {
     this.setInitialRouteState();
+    this.props.currentSession();
   }
 
   public componentWillUnmount(): void {
@@ -35,23 +49,37 @@ export class AppRouter extends React.Component<any> {
   }
 
   public shouldComponentUpdate(nextProps: AppRouterProps): boolean {
-    return this.props.auth.isAuthorized !== nextProps.auth.isAuthorized;
+    return (
+      this.props.auth.isAuthorized !== nextProps.auth.isAuthorized ||
+      this.props.auth.onRequest !== nextProps.auth.onRequest
+    );
   }
 
   public render(): React.ReactNode {
     const routerRoutes = this.buildRouterRoutes(this.props.auth.isAuthorized, routes);
 
     return (
-      <Router history={history}>
-        <Switch>
-          {routerRoutes}
-          <Route component={createAsyncComponent(() => import('@pages/NotFound'))} />
-          <Route
-            component={createAsyncComponent(() => import('@pages/NotFound'))}
-            path={paths.noMatch}
-          />
-        </Switch>
-      </Router>
+      <React.Fragment>
+        <Router history={history}>
+          <Switch>
+            {routerRoutes}
+            <Route component={createAsyncComponent(() => import('@pages/NotFound'))} />
+            <Route
+              component={createAsyncComponent(() => import('@pages/NotFound'))}
+              path={paths.noMatch}
+            />
+          </Switch>
+        </Router>
+        <div
+          className={classnames({
+            'is-active': this.props.auth.onRequest,
+            pageloader: true,
+          })}
+          style={loaderStyles}
+        >
+          <span className="title">Loading...</span>
+        </div>
+      </React.Fragment>
     );
   }
 
