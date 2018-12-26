@@ -24,17 +24,33 @@ interface ITabsState {
 
 class Tabs extends React.PureComponent<ITabsProps, ITabsState> {
   public static getDerivedStateFromProps(p: ITabsProps, s: ITabsState): ITabsState | null {
-    const props = p.items.map(prop => prop.title);
-    const state = s.items.map(itemState => itemState.title);
+    const props = {
+      items: p.items.map(itemState => ({
+        content: itemState.content,
+        title: itemState.title,
+      })),
+    };
+    const state = {
+      items: s.items.map(itemState => ({
+        content: itemState.content,
+        title: itemState.title,
+      })),
+    };
 
     if (!isEqual(props, state)) {
       return Tabs.mapPropsToState(p.items);
     }
 
-    return null;
+    return s;
   }
 
-  private static mapPropsToState(items: ITabItem[]) {
+  /**
+   * This method return new state data base it in
+   * new props data
+   * @param {ITabItem[]} items data from new props
+   * @returns {ITabsState} new state data
+   */
+  private static mapPropsToState(items: ITabItem[]): ITabsState {
     return {
       items: items.map((item, i) => ({
         ...item,
@@ -76,6 +92,10 @@ class Tabs extends React.PureComponent<ITabsProps, ITabsState> {
     );
   }
 
+  /**
+   * This method set the active tab state
+   * @param index The index of the next active tab
+   */
   private setTab(index: number): void {
     this.setState({
       items: this.state.items.map(item => ({

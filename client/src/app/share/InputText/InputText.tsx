@@ -14,6 +14,9 @@ interface IInputText {
   label?: string;
 }
 
+/**
+ * Input test component, it receibes the formik objects
+ */
 const InputText: React.SFC<IInputText> = ({
   id = guid(),
   name,
@@ -24,12 +27,18 @@ const InputText: React.SFC<IInputText> = ({
   placeholder,
   label,
 }) => {
+  /**
+   * Label element if the label prop exist
+   */
   const labelEl = label ? (
     <label
       className="label"
       htmlFor={id}
     >{label}</label>
   ): null;
+  /**
+   * Error element when the error prop has a value
+   */
   const errorEl = errors && errors[name] && touched[name] ? (
     <p className="input-text__error is-size-7 has-text-danger">{errors[name]}</p>
   ) : null;

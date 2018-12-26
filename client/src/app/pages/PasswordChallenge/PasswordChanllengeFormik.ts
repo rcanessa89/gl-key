@@ -8,17 +8,20 @@ export type PasswordChanllengeFormik = IAuthContainerChildProps & IRouteComponen
 
 export interface IFormValues {
   confirmPassword: string,
-  lastname: string,
+  lastName: string,
   name: string,
   password: string,
 }
 
+/**
+ * Formik configuration for password challege form
+ */
 export default withFormik<PasswordChanllengeFormik, IFormValues>({
   handleSubmit: (values, { props, setStatus, setSubmitting }) => {
     const { user } = props.auth as any;
 
     user!.completeNewPasswordChallenge(values.password, {
-      family_name: values.lastname,
+      family_name: values.lastName,
       name: values.name,
       preferred_username: user.challengeParam.userAttributes.email,
     }, {
@@ -33,7 +36,7 @@ export default withFormik<PasswordChanllengeFormik, IFormValues>({
   },
   mapPropsToValues: () => ({
     confirmPassword: '',
-    lastname: '',
+    lastName: '',
     name: '',
     password: '',
   }),
@@ -41,9 +44,9 @@ export default withFormik<PasswordChanllengeFormik, IFormValues>({
     confirmPassword: string()
       .oneOf([ref('password'), null], 'Password doesn\'t match.')
       .required('Confirm password is required'),
-    lastname: string()
+    lastName: string()
       .trim()
-      .required('Lastname is required'),
+      .required('Last name is required'),
     name: string()
       .trim()
       .required('Name is required'),

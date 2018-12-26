@@ -1,97 +1,96 @@
+import { MOMENT_FORMAT } from '@constants';
 import { IEntry, IRouteComponentProps } from '@interfaces';
-import { Table } from '@share';
-import { Tabs } from '@share';
+import { Entry } from '@models';
+import { Api } from '@services';
+import { Table, Tabs } from '@share';
+import * as moment from 'moment';
 import * as React from 'react';
+import { AjaxResponse } from 'rxjs/ajax';
+import EntryActions from './EntryActions/EntryActions';
 
-const t: IEntry[] = [
-  {
-    cedula: 603780292,
-    checkIn: 'viernes',
-    checkOut: 'sabado',
-    createdAt: 'ayer',
-    id: 0,
-    lastname: 'canessa',
-    name: 'rodolfo',
-    signature: 'test',
-    updatedAt: 'manana',
-  },
-  {
-    cedula: 603780292,
-    checkIn: 'viernes',
-    checkOut: 'sabado',
-    createdAt: 'ayer',
-    id: 1,
-    lastname: 'canessa',
-    name: 'rodolfo',
-    signature: 'test',
-    updatedAt: 'manana',
-  },
-  {
-    cedula: 603780292,
-    checkIn: 'viernes',
-    checkOut: 'sabado',
-    createdAt: 'ayer',
-    id: 2,
-    lastname: 'canessa',
-    name: 'rodolfo',
-    signature: 'test',
-    updatedAt: 'manana',
-  },
-];
+interface IEntryState extends IEntry {
+  actions: React.ReactElement<EntryActions>;
+}
 
-class Entries extends React.PureComponent<IRouteComponentProps> {
-  private columns: any[] = [
+interface IEntriesState {
+  entries: IEntryState[];
+}
+
+/**
+ * Entries route view component
+ */
+class Entries extends React.PureComponent<IRouteComponentProps, IEntriesState> {
+  public state: IEntriesState = {
+    entries: [],
+  };
+
+  private api = new Api();
+  /**
+   * Columns map of the entries table
+   */
+  private readonly columns = [
     {
-      dataKey: 'cedula',
-      label: 'Cedula',
+      header: 'Cedula',
+      key: 'cedula',
     },
     {
-      dataKey: 'name',
-      label: 'Name',
+      header: 'Full name',
+      key: 'fullName',
     },
     {
-      dataKey: 'lastname',
-      label: 'Lastname',
+      header: 'Check in',
+      key: 'checkIn',
     },
     {
-      dataKey: 'checkIn',
-      label: 'Check In',
+      header: 'Check out',
+      key: 'checkOut',
     },
     {
-      dataKey: 'checkOut',
-      label: 'Check Out',
-    },
-    {
-      cellRenderer: ({ rowData }: any) => {
-        return (
-          <span
-            className="icon entries-table__icon"
-            onClick={this.onSignatureClick.bind(this, rowData)}
-          >
-            <i className="fas fa-signature" />
-          </span>
-        );
-      },
-      dataKey: 'signature',
-      label: 'Signature',
-    },
+      header: 'Actions',
+      key: 'actions'
+    }
   ];
 
+  public componentDidMount() {
+    this.fetchEntries();
+  }
+
   public render() {
+    const { entries } = this.state;
+    const activeEntries = entries.filter((e: IEntry) => !e.checkOut);
+    const deactiveEntries = entries.filter((e: IEntry) => e.checkOut);
     const tabsItems = [
       {
-        content: <Table columns={this.columns} data={t} />,
+        content: (
+          <Table
+            className="is-striped"
+            keys={this.columns}
+            data={entries}
+          />
+        ),
         title: 'All',
       },
       {
-        content: <Table columns={this.columns} data={t} />,
+        content: (
+          <Table
+            className="is-striped"
+            keys={this.columns}
+            data={activeEntries}
+          />
+        ),
         title: 'Active',
       },
       {
-        content: <Table columns={this.columns} data={t} />,
+        content: (
+          <Table
+            className="is-striped"
+            keys={this.columns}
+            data={deactiveEntries}
+          />
+        ),
         title: 'Deactive',
       },
-    ]
+    ];
 
     return (
       <section className="section">
@@ -102,9 +101,73 @@ class Entries extends React.PureComponent<IRouteComponentProps> {
     );
   }
 
-  private onSignatureClick = (x: any): void => {
-    console.log(x);
+  /**
+   * This method consume the API service to get the entries data
+   */
+  private fetchEntries() {
+    const filter = {
+      relations: [
+        'assets',
+      ],
+    };
+
+    this.api.call(`entry?filter=${JSON.stringify(filter)}`)
+      .subscribe((value: AjaxResponse) => this.setState({
+        entries: value.response.map((e: IEntry) => {
+          const entry = new Entry(({
+            ...e,
+            checkIn: moment(e.checkIn).format(MOMENT_FORMAT.MMDDYYYY_HHMM_A),
+            checkOut: e.checkOut ? moment(e.checkOut).format(MOMENT_FORMAT.MMDDYYYY_HHMM_A) : 'N/A',
+          }));
+
+          return this.getActionsValue(entry);
+        }),
+      }));
   }
+
+  /**
+   * Change the entries state putting the updated entry
+   * @param {Entry} updatedEntry updated entry data
+   */
+  private updateEntryState = (updatedEntry: Entry): void => {
+    this.setState({
+      entries: this.state.entries.map((entry: IEntryState) => {
+        if (updatedEntry.id === entry.id) {
+          return this.getActionsValue(updatedEntry);
+        }
+
+        return entry;
+      })
+    });
+  };
+
+  /**
+   * Change the entries state removing the deleted entry
+   * @param {Entry} deletedEntry deleted entry data
+   */
+  private deleteEntryState = (deletedEntry: Entry): void => {
+    this.setState({
+      entries: this.state.entries.filter((e: IEntryState) => e.id !== deletedEntry.id),
+    });
+  }
+
+  /**
+   * Return the EntryActions element
+   * @param {Entry} entry data of the entries table row
+   */
+  private getActionsValue = (entry: Entry) => {
+    return {
+      ...entry,
+      actions: (
+        <EntryActions
+          entry={entry}
+          updateEntryState={this.updateEntryState}
+          deleteEntryState={this.deleteEntryState}
+        />
+      ),
+      fullName: entry.fullName,
+    };
+  };
 }
 
 export default Entries

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/moment": "^2.13.0",
     "aws-amplify": "^1.1.17",
     "bulma": "^0.7.2",
     "bulma-calendar": "^5.0.3",
@@ -26,7 +27,7 @@
   },
   "scripts": {
     "analyze": "react-scripts-ts build && source-map-explorer build/static/js/main.*",
-    "start": "concurrently \"node-sass-chokidar --include-path src/scss src/ !src/scss -o src/ --watch --recursive --output-style compressed\" \"react-scripts-ts start\"",
+    "start": "PORT=8000 concurrently \"node-sass-chokidar --include-path src/scss src/ !src/scss -o src/ --watch --recursive --output-style compressed\" \"react-scripts-ts start\"",
     "build": "node-sass-chokidar --include-path src/scss src/ -o src/ --output-style compressed && react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"

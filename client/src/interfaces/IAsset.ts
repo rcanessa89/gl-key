@@ -1,4 +1,4 @@
-// import IEntry from './IEntry';
+import { Entry } from '@models';
 
 export default interface IAssets {
   id: number;
@@ -6,9 +6,7 @@ export default interface IAssets {
 	model: string;
 	seriesNumber: string;
 	brand: string;
-	owner: any;
-	checkIn: string;
-	checkOut: string;
+	entry: Entry;
 	createdAt: string;
 	updatedAt: string;
 }

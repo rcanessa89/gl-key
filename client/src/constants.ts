@@ -9,3 +9,11 @@ export const CHALLENGES = {
 };
 
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+export const MOMENT_FORMAT = {
+  MMDDYYYY_HHMM_A: 'MM-DD-YYYY, hh:mm a',
+};
+
+export const CLASSNAMES = {
+  IS_ACTIVE: 'is-active',
+};

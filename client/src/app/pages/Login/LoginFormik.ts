@@ -10,6 +10,9 @@ export interface IFormValues {
 
 export type LoginFormikProps = IAuthContainerChildProps & RouteComponentProps;
 
+/**
+ * Formik form configuration for login form
+ */
 export default withFormik<LoginFormikProps & any, IFormValues>({
   handleSubmit: ({ email, password }, { props }) => {
     props.login({ email, password });

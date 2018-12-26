@@ -8,6 +8,10 @@ import { Redirect } from 'react-router-dom';
 import './password-challenge.css';
 import { IFormValues, PasswordChanllengeFormik } from './PasswordChanllengeFormik';
 
+/**
+ * Password challenge form component,
+ * it receives formik data by props
+ */
 const PasswordChanllenge: React.SFC<
   InjectedFormikProps<PasswordChanllengeFormik, IFormValues>
 > = ({
@@ -45,12 +49,12 @@ const PasswordChanllenge: React.SFC<
             placeholder="Your name..."
           />
           <InputText
-            label="Lastname"
-            name="lastname"
+            label="Last Name"
+            name="lastName"
             handleChange={handleChange}
             errors={errors}
             touched={touched}
-            placeholder="Your lastname..."
+            placeholder="Your last name..."
           />
           <div className="content">
             <ul>

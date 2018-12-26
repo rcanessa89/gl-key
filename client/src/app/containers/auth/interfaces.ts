@@ -45,6 +45,7 @@ export interface IAuthState {
   message: string;
   user: CognitoUser | null;
   onRequest: boolean;
+  sessionRequested: boolean;
 }
 
 export interface IAuthContainerChildProps {

@@ -14,6 +14,7 @@ const initialState: IAuthState = {
   isAuthorized: false,
   message: '',
   onRequest: false,
+  sessionRequested: false,
   user: null,
 };
 
@@ -35,6 +36,7 @@ export default createReducer<IAuthState>(initialState, {
       isAuthorized: true,
       message: 'Authentication success',
       onRequest: false,
+      sessionRequested: true,
       user: action.payload,
     };
   },
@@ -44,6 +46,7 @@ export default createReducer<IAuthState>(initialState, {
       isAuthorized: false,
       message: action.payload,
       onRequest: false,
+      sessionRequested: true,
       user: null,
     };
   },

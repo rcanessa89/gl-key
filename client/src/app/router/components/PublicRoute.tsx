@@ -4,7 +4,7 @@ import { SFC } from 'react';
 import { Route } from 'react-router-dom';
 import { getRenderRoute, validateProps } from '../utils';
 
-const PublicRoute: SFC<IRouteOptsProps> = ({
+const PublicRoute: SFC<IRouteOptsProps> = React.memo(({
   component,
   nested,
   ...props
@@ -24,6 +24,6 @@ const PublicRoute: SFC<IRouteOptsProps> = ({
       render={renderComponent}
     />
   );
-};
+});
 
 export default PublicRoute;

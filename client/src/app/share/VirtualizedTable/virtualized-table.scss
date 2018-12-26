@@ -1,0 +1,32 @@
+@import 'util';
+
+.virtualized-table {
+  * {
+    overflow: visible !important;
+  }
+
+  .ReactVirtualized__Grid {
+    outline: none;
+  }
+
+  .ReactVirtualized__Table__headerRow {
+    border-bottom: 2px solid $alto;
+    margin-bottom: 5px;
+  }
+
+  .ReactVirtualized__Table__rowColumn,
+  .ReactVirtualized__Table__headerColumn {
+    margin: 0 !important;
+    text-align: center;
+  }
+
+  .ReactVirtualized__Table__headerColumn {
+    color: $mine-shaft;
+    text-transform: capitalize;
+  }
+
+  .ReactVirtualized__Table__rowColumn {
+    border-bottom: 1px solid $alto;
+    min-height: 32px;
+  }
+}

@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
   import('why-did-you-update')
     .then(({ whyDidYouUpdate }) => {
       whyDidYouUpdate(React, {
-        exclude: RegExp(/^(Switch|Router|Route)$/)
+        exclude: RegExp(/^(Switch|Router|Route|Link)$/)
       });
     });
 }

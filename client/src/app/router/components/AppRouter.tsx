@@ -57,19 +57,22 @@ export class AppRouter extends React.Component<AppRouterProps> {
 
   public render(): React.ReactNode {
     const routerRoutes = this.buildRouterRoutes(this.props.auth.isAuthorized, routes);
+    const routerEl = this.props.auth.sessionRequested ? (
+      <Router history={history}>
+        <Switch>
+          {routerRoutes}
+          <Route component={createAsyncComponent(() => import('@pages/NotFound'))} />
+          <Route
+            component={createAsyncComponent(() => import('@pages/NotFound'))}
+            path={paths.noMatch}
+          />
+        </Switch>
+      </Router>
+    ) : null;
 
     return (
       <React.Fragment>
-        <Router history={history}>
-          <Switch>
-            {routerRoutes}
-            <Route component={createAsyncComponent(() => import('@pages/NotFound'))} />
-            <Route
-              component={createAsyncComponent(() => import('@pages/NotFound'))}
-              path={paths.noMatch}
-            />
-          </Switch>
-        </Router>
+        {routerEl}
         <div
           className={classnames({
             'is-active': this.props.auth.onRequest,

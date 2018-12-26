@@ -5,20 +5,14 @@ import './exports.css';
 
 declare var bulmaCalendar: any;
 
+/**
+ * Export route view component
+ */
 class Exports extends React.PureComponent<IRouteComponentProps> {
   private calendars: any[];
 
   public componentDidMount() {
-    this.calendars = bulmaCalendar.attach('[type="date"]', {
-      ...DATE_PICKER_OPTIONS,
-      isRange: true,
-    });
-
-    this.calendars.forEach(c => {
-      c.on('date:selected', (date: any) => {
-        console.log(date);
-      });
-    });
+    this.atachBulmaCalendar();
   }
 
   public render() {
@@ -44,6 +38,22 @@ class Exports extends React.PureComponent<IRouteComponentProps> {
         </div>
       </section>
     );
+  }
+
+  /**
+   * This method atach the bulma css calendar functionality
+   */
+  private atachBulmaCalendar(): void {
+    this.calendars = bulmaCalendar.attach('[type="date"]', {
+      ...DATE_PICKER_OPTIONS,
+      isRange: true,
+    });
+
+    this.calendars.forEach(c => {
+      c.on('date:selected', (date: any) => {
+        console.log(date);
+      });
+    });
   }
 }
 

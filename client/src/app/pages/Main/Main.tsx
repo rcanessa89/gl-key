@@ -17,6 +17,9 @@ interface IMainState {
   open: boolean;
 }
 
+/**
+ * The main component has the content of the app
+ */
 class Main extends React.Component<MainProps, IMainState> {
   public state = {
     open: false,

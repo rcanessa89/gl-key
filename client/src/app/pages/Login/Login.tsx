@@ -6,6 +6,10 @@ import glImg from '../../../assets/img/gorillalogic.jpg';
 import './login.css';
 import { IFormValues, LoginFormikProps } from './LoginFormik';
 
+/**
+ * Login form component, it receives formik
+ * data by props
+ */
 const Login: React.SFC<InjectedFormikProps<LoginFormikProps, IFormValues>> = ({
   auth,
   errors,

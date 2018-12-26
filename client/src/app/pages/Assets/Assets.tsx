@@ -1,103 +1,86 @@
 import { IAsset, IRouteComponentProps } from '@interfaces';
-import { Table } from '@share';
-import { Tabs } from '@share';
+import { Asset } from '@models';
+import { Api } from '@services';
+import { Table, Tabs } from '@share';
 import * as React from 'react';
+import { AjaxResponse } from 'rxjs/ajax';
 
-const t: IAsset[] = [
-  {
-    brand: 'string',
-    checkIn: 'string',
-    checkOut: 'string',
-    createdAt: 'string',
-    description: 'string',
-    id: 0,
-    model: 'string',
-    owner: 'any',
-    seriesNumber: 'string',
-    updatedAt: 'string',
-  },
-  {
-    brand: 'string',
-    checkIn: 'string',
-    checkOut: 'string',
-    createdAt: 'string',
-    description: 'string',
-    id: 1,
-    model: 'string',
-    owner: 'any',
-    seriesNumber: 'string',
-    updatedAt: 'string',
-  },
-  {
-    brand: 'string',
-    checkIn: 'string',
-    checkOut: 'string',
-    createdAt: 'string',
-    description: 'string',
-    id: 2,
-    model: 'string',
-    owner: 'any',
-    seriesNumber: 'string',
-    updatedAt: 'string',
-  },
-  {
-    brand: 'string',
-    checkIn: 'string',
-    checkOut: 'string',
-    createdAt: 'string',
-    description: 'string',
-    id: 3,
-    model: 'string',
-    owner: 'any',
-    seriesNumber: 'string',
-    updatedAt: 'string',
-  },
-];
+interface IAssetState extends IAsset {
+  owner: string;
+}
 
-class Assets extends React.PureComponent<IRouteComponentProps> {
-  private columns: any[] = [
+interface IAssetsState {
+  assets: IAssetState[];
+}
+
+/**
+ * Assets route view component
+ */
+class Assets extends React.PureComponent<IRouteComponentProps, IAssetsState> {
+  public state = {
+    assets: [],
+  };
+
+  private api = new Api();
+  /**
+   * Columns map of the asset table
+   */
+  private readonly columns = [
     {
-      dataKey: 'description',
-      label: 'Description',
+      header: 'Brand',
+      key: 'brand',
     },
     {
-      dataKey: 'model',
-      label: 'Model',
+      header: 'Description',
+      key: 'description',
     },
     {
-      dataKey: 'seriesNumber',
-      label: 'Series Number',
+      header: 'Model',
+      key: 'model',
     },
     {
-      dataKey: 'owner',
-      label: 'Owner',
-    },
-    {
-      dataKey: 'checkOut',
-      label: 'Check Out',
-    },
-    {
-      dataKey: 'checkIn',
-      label: 'Check In',
-    },
-    {
-      dataKey: 'checkOut',
-      label: 'Check Out',
+      header: 'Series',
+      key: 'series',
     },
   ];
 
+  public componentDidMount() {
+    this.fetchAssets();
+  }
+
   public render() {
+    const { assets } = this.state;
+    const activeAssets = assets.filter((a: Asset) => !a.entry.checkOut);
+    const deactiveAssets = assets.filter((a: Asset) => a.entry.checkOut);
     const tabsItems = [
       {
-        content: <Table columns={this.columns} data={t} />,
+        content: (
+          <Table
+            className="is-striped"
+            keys={this.columns}
+            data={assets}
+          />
+        ),
         title: 'All',
       },
       {
-        content: <Table columns={this.columns} data={t} />,
+        content: (
+          <Table
+            className="is-striped"
+            keys={this.columns}
+            data={activeAssets}
+          />
+        ),
         title: 'Active',
       },
       {
-        content: <Table columns={this.columns} data={t} />,
+        content: (
+          <Table
+            className="is-striped"
+            keys={this.columns}
+            data={deactiveAssets}
+          />
+        ),
         title: 'Deactive',
       },
     ]
@@ -109,6 +92,22 @@ class Assets extends React.PureComponent<IRouteComponentProps> {
         </div>
       </section>
     );
+  }
+
+  /**
+   * This method consume the API service to get the assets data
+   */
+  private fetchAssets() {
+    const filter = {
+      relations: [
+        'entry',
+      ],
+    };
+
+    this.api.call(`asset?filter=${JSON.stringify(filter)}`)
+      .subscribe((value: AjaxResponse) => this.setState({
+        assets: value.response.map((a: Asset) => new Asset(a)),
+      }));
   }
 }
 
